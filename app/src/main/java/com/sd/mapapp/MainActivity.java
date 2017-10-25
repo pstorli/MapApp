@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.PolygonBuilder;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
@@ -12,6 +13,7 @@ import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.symbology.SimpleFillSymbol;
+import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.esri.arcgisruntime.symbology.SimpleRenderer;
 
 public class MainActivity extends AppCompatActivity
@@ -62,8 +64,9 @@ public class MainActivity extends AppCompatActivity
         mapView = (MapView) findViewById(R.id.mapView);
 
         // 18529 CHEMAWA LANE, SILVERTON, OR 97381 LAT/LONG
-        ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 15.169193, 16.333479, 2); //, 45.003911, -122.68582600000002, 15);
+        ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 15.169193, 16.333479, 2); //, 45.003911, -122.68582600000002, 15); //
         mapView.setMap(map);
+
     }
 
     private void addHomeIcon (GraphicsOverlay graphicOverlay) {
@@ -80,33 +83,21 @@ public class MainActivity extends AppCompatActivity
 
         //
 
-        //polygon graphic
-        PolygonBuilder polygonGeometry = new PolygonBuilder(SpatialReferences.getWebMercator());
-        polygonGeometry.addPoint(-20e5, 20e5);
-        polygonGeometry.addPoint(20e5, 20e5);
-        polygonGeometry.addPoint(20e5, -20e5);
-        polygonGeometry.addPoint(-20e5, -20e5);
-
-        // solid yellow polygon symbol
-        SimpleFillSymbol polygonSymbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.YELLOW, null);
-
-        // create graphic for polygon
-        Graphic polygonGraphic = new Graphic(polygonGeometry.toGeometry());
-
-        // create graphic overlay for polygon
-        GraphicsOverlay polygonGraphicOverlay = new GraphicsOverlay();
-
+        // point graphic
+        Point pointGeometry = new Point(40e5, 40e5, SpatialReferences.getWebMercator());
+        // red diamond point symbol
+        SimpleMarkerSymbol pointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.DIAMOND, Color.RED, 10);
+        // create graphic for point
+        Graphic pointGraphic = new Graphic(pointGeometry);
+        // create a graphic overlay for the point
+        GraphicsOverlay pointGraphicOverlay = new GraphicsOverlay();
         // create simple renderer
-        SimpleRenderer polygonRenderer = new SimpleRenderer(polygonSymbol);
-
+        SimpleRenderer pointRenderer = new SimpleRenderer(pointSymbol);
+        pointGraphicOverlay.setRenderer(pointRenderer);
         // add graphic to overlay
-        polygonGraphicOverlay.setRenderer(polygonRenderer);
-
-        // add graphic to overlay
-        polygonGraphicOverlay.getGraphics().add(polygonGraphic);
-
-        // add graphics overlay to MapView
-        mapView.getGraphicsOverlays().add(polygonGraphicOverlay);
+        pointGraphicOverlay.getGraphics().add(pointGraphic);
+        // add graphics overlay to the MapView
+        mapView.getGraphicsOverlays().add(pointGraphicOverlay);
 
     }
 
