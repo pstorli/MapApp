@@ -9,6 +9,7 @@ import com.esri.arcgisruntime.geometry.PolygonBuilder;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
+import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.MapView;
@@ -40,65 +41,55 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // inflate MapView from layout
+        mapView = (MapView) findViewById(R.id.mapView);
+
         createHome ();
 
         // add graphics overlay to MapView.
-        GraphicsOverlay graphicsOverlay = addGraphicsOverlay(mapView);
+        GraphicsOverlay graphicsOverlay = addGraphicsOverlay();
 
         //add an icon for my home.
         addHomeIcon (graphicsOverlay);
 
     }
 
-    private GraphicsOverlay addGraphicsOverlay(MapView mapView) {
-        //create the graphics overlay
-       GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
-
-        //add the overlay to the map view
-        mapView.getGraphicsOverlays().add(graphicsOverlay);
-        return graphicsOverlay;
-    }
-
     private void createHome ()
     {
-        mapView = (MapView) findViewById(R.id.mapView);
+        // create a map with the imagery basemap
+        ArcGISMap map = new ArcGISMap(Basemap.createImagery());
 
-        // 18529 CHEMAWA LANE, SILVERTON, OR 97381 LAT/LONG
-        ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 15.169193, 16.333479, 2); //, 45.003911, -122.68582600000002, 15); //
+        // create an initial viewpoint with a point and scale
+        Point point = new Point(-226773, 6550477, SpatialReferences.getWebMercator());  //, 45.003911, -122.68582600000002, 15); //
+        Viewpoint vp = new Viewpoint(point, 7500);
+
+        // set initial map extent
+        map.setInitialViewpoint(vp);
+
+        // set the map to be displayed in the mapview
         mapView.setMap(map);
 
     }
 
-    private void addHomeIcon (GraphicsOverlay graphicOverlay) {
-        //define the home locations long/lat
-        //Point homeLoc = new Point(40e5, 40e5, SpatialReferences.getWebMercator()); //-122.685828, 45.003912, SpatialReferences.getWebMercator());
+    private GraphicsOverlay addGraphicsOverlay()
+    {
+        // create a new graphics overlay and add it to the mapview
+        GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
+        mapView.getGraphicsOverlays().add(graphicsOverlay);
 
-        //SimpleMarkerSymbol homeMarker = new SimpleMarkerSymbol (SimpleMarkerSymbol.Style.SQUARE, Color.GREEN, 100);
-
-        //create graphics
-        //Graphic homeGraphic = new Graphic(homeLoc, homeMarker);
-
-        //add the graphics to the graphics overlay
-        //graphicOverlay.getGraphics().add(homeGraphic);
-
-        //
-
-        // point graphic
-        Point pointGeometry = new Point(40e5, 40e5, SpatialReferences.getWebMercator());
-        // red diamond point symbol
-        SimpleMarkerSymbol pointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.DIAMOND, Color.RED, 10);
-        // create graphic for point
-        Graphic pointGraphic = new Graphic(pointGeometry);
-        // create a graphic overlay for the point
-        GraphicsOverlay pointGraphicOverlay = new GraphicsOverlay();
-        // create simple renderer
-        SimpleRenderer pointRenderer = new SimpleRenderer(pointSymbol);
-        pointGraphicOverlay.setRenderer(pointRenderer);
-        // add graphic to overlay
-        pointGraphicOverlay.getGraphics().add(pointGraphic);
-        // add graphics overlay to the MapView
-        mapView.getGraphicsOverlays().add(pointGraphicOverlay);
-
+        return graphicsOverlay;
     }
 
+    private void addHomeIcon (GraphicsOverlay graphicOverlay)
+    {
+        //[DocRef: Name=Point graphic with symbol, Category=Fundamentals, Topic=Symbols and Renderers]
+        //create a simple marker symbol
+        SimpleMarkerSymbol symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.SQUARE, Color.GREEN, 12); //size 12, style of circle
+
+        //add a new graphic with a new point geometry
+        Point graphicPoint = new Point(-226773, 6550477, SpatialReferences.getWebMercator());
+        Graphic graphic = new Graphic(graphicPoint, symbol);
+        graphicOverlay.getGraphics().add(graphic);
+        //[DocRef: END]
+    }
 }

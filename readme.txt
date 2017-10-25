@@ -1,11 +1,14 @@
 // Your first app doc.
 https://developers.arcgis.com/android/latest/guide/develop-your-first-map-app.htm
 
-// Sample Apps
+// Sample Apps Docs
+https://developers.arcgis.com/android/latest/sample-code/sample-code.htm
+
+// Sample Apps Source Code
 https://github.com/Esri/arcgis-runtime-samples-android
 
 // Arc Gis developer site
-https://developers.arcgis.com/
+https://developers.arcgis.com
 
 // My first map app
 https://github.com/pstorli/MapApp.git
