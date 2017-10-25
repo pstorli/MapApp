@@ -1,5 +1,13 @@
+// Your first app doc.
 https://developers.arcgis.com/android/latest/guide/develop-your-first-map-app.htm
 
+// Sample Apps
+https://github.com/Esri/arcgis-runtime-samples-android
+
+// Arc Gis developer site
+https://developers.arcgis.com/
+
+// My first map app
 https://github.com/pstorli/MapApp.git
 
 MapAppSkeleton App as an apk download.
